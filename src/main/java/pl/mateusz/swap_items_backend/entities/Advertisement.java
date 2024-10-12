@@ -1,0 +1,57 @@
+package pl.mateusz.swap_items_backend.entities;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+public class Advertisement extends BaseEntity {
+
+    @Column(nullable = false)
+    private String title;
+
+    private String description;
+
+    private String phoneNumber;
+
+    @Column(nullable = false)
+    private LocalDateTime addDate;
+
+    @ManyToOne
+    @JoinColumn(name = "localization_id", nullable = false)
+    private Localization localization;
+
+    @ManyToOne
+    @JoinColumn(name = "main_category_id", nullable = false)
+    private MainCategory mainCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "advertisement_followers",
+            joinColumns = @JoinColumn(name = "advertisement_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> followers = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "advertisement_files",
+            joinColumns = @JoinColumn(name = "advertisement_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id")
+    )
+    private Set<File> files = new HashSet<>();
+}

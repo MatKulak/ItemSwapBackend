@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
 
     @NotBlank(message = "Name is required")
-    private String name;
+    private String firstName;
 
     @NotBlank(message = "Surname is required")
-    private String surname;
+    private String lastName;
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")

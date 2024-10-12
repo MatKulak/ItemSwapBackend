@@ -10,12 +10,16 @@ import pl.mateusz.swap_items_backend.dto.auth.LoginRequest;
 import pl.mateusz.swap_items_backend.dto.auth.AuthenticationResponse;
 import pl.mateusz.swap_items_backend.dto.auth.RegisterRequest;
 import pl.mateusz.swap_items_backend.dto.user.UserResponse;
+import pl.mateusz.swap_items_backend.entities.Role;
 import pl.mateusz.swap_items_backend.entities.Token;
 import pl.mateusz.swap_items_backend.entities.User;
+import pl.mateusz.swap_items_backend.enums.BasicRoles;
 import pl.mateusz.swap_items_backend.repositories.TokenRepository;
 import pl.mateusz.swap_items_backend.repositories.UserRepository;
 import pl.mateusz.swap_items_backend.security.JwtService;
+import pl.mateusz.swap_items_backend.security.RoleService;
 
+import java.util.Collections;
 import java.util.List;
 
 import static pl.mateusz.swap_items_backend.others.Messages.*;
@@ -30,6 +34,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final RoleService roleService;
 
     public AuthenticationResponse login(final LoginRequest loginRequest) {
         authenticationManager.authenticate(
@@ -63,12 +68,13 @@ public class AuthenticationService {
             throw new RuntimeException(PHONE_NUMBER_ALREADY_EXISTS);
 
         final User user = User.builder()
-                .name(registerRequest.getName())
-                .surname(registerRequest.getSurname())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
                 .username(registerRequest.getUsername())
                 .email(registerRequest.getEmail())
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .roles(Collections.singleton(roleService.getRoleByRoleName(BasicRoles.USER.toString())))
                 .build();
 
         final User savedUser = userRepository.save(user);
@@ -87,8 +93,8 @@ public class AuthenticationService {
 
         return UserResponse.builder()
                 .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
+                .name(user.getFirstName())
+                .surname(user.getLastName())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
@@ -104,8 +110,6 @@ public class AuthenticationService {
 
         return tokenRepository.saveAll(validTokenListByUser);
     }
-
-
 
     private Token saveUserToken(final String jwt, final User user) {
         final Token token = Token.builder()
