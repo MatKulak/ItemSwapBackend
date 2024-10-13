@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocalizationResponse {
+
+    private String city;
+    private String postalCode;
+    private String street;
 }

@@ -39,8 +39,8 @@ public class AdvertisementController {
     }
 
     @GetMapping(API_ADVERTISEMENTS)
-    public Page<AdvertisementWithFilesResponse> getAll(@QuerydslPredicate(root = Advertisement.class) final Predicate predicate,
-                                                       @PageableDefault final Pageable pageable,
+    public Page<AdvertisementWithFilesResponse> getAll(final @QuerydslPredicate(root = Advertisement.class) Predicate predicate,
+                                                       final @PageableDefault Pageable pageable,
                                                        final @RequestParam MultiValueMap<String, String> parameters) {
         return advertisementService.getAll(predicate, pageable, parameters);
     }

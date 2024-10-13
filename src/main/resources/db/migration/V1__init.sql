@@ -142,7 +142,7 @@ ALTER TABLE ONLY public.advertisement_followers
 ALTER TABLE ONLY public.advertisement_followers
     ADD CONSTRAINT advertisement_followers_fkey_advertisement FOREIGN KEY (advertisement_id) REFERENCES public.advertisement (id);
 
-create table public.file
+create table public.system_file
 (
     id            uuid NOT NULL,
     original_name character varying(255),
@@ -150,26 +150,27 @@ create table public.file
     path          character varying(255),
     mime_type     character varying(255),
     size          bigint,
-    deleted       boolean
+    saved         boolean,
+    system_file_order    int
 );
 
-ALTER TABLE ONLY public.file
-    ADD CONSTRAINT file_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.system_file
+    ADD CONSTRAINT system_file_pkey PRIMARY KEY (id);
 
-create table public.advertisement_files
+create table public.advertisement_system_files
 (
     advertisement_id uuid NOT NULL,
-    file_id          uuid NOT NULL
+    system_file_id          uuid NOT NULL
 );
 
-ALTER TABLE ONLY public.advertisement_files
-    ADD CONSTRAINT advertisement_files_pkey PRIMARY KEY (advertisement_id, file_id);
+ALTER TABLE ONLY public.advertisement_system_files
+    ADD CONSTRAINT advertisement_system_files_pkey PRIMARY KEY (advertisement_id, system_file_id);
 
-ALTER TABLE ONLY public.advertisement_files
-    ADD CONSTRAINT advertisement_files_fkey_advertisement FOREIGN KEY (advertisement_id) REFERENCES public.advertisement (id);
+ALTER TABLE ONLY public.advertisement_system_files
+    ADD CONSTRAINT advertisement_system_files_fkey_advertisement FOREIGN KEY (advertisement_id) REFERENCES public.advertisement (id);
 
-ALTER TABLE ONLY public.advertisement_files
-    ADD CONSTRAINT advertisement_files_fkey_file FOREIGN KEY (file_id) REFERENCES public.file (id);
+ALTER TABLE ONLY public.advertisement_system_files
+    ADD CONSTRAINT advertisement_system_files_fkey_system_file FOREIGN KEY (system_file_id) REFERENCES public.system_file (id);
 
 create table public.conversation
 (

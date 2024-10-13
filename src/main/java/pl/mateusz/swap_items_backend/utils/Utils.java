@@ -3,8 +3,10 @@ package pl.mateusz.swap_items_backend.utils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import pl.mateusz.swap_items_backend.entities.User;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static pl.mateusz.swap_items_backend.others.Messages.ENTITY_NOT_FOUND;
 
@@ -32,6 +34,10 @@ public class Utils {
             return "";
         }
         return fileName.substring(lastIndexOfDot);
+    }
+
+    public static <T> Stream<T> toStream(final Collection<T> collection) {
+        return Stream.ofNullable(collection).flatMap(Collection::stream);
     }
 
 }

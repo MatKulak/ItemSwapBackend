@@ -5,12 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.mateusz.swap_items_backend.dto.category.MainCategoryResponse;
-import pl.mateusz.swap_items_backend.dto.file.FileResponse;
 import pl.mateusz.swap_items_backend.dto.localization.LocalizationResponse;
 import pl.mateusz.swap_items_backend.dto.user.UserResponse;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -26,6 +24,4 @@ public class AdvertisementResponse {
     private LocalizationResponse localizationResponse;
     private MainCategoryResponse mainCategoryResponse;
     private UserResponse userResponse;
-//    private FileResponse
-
 }

@@ -51,7 +51,7 @@ public class Advertisement extends BaseEntity {
     @JoinTable(
             name = "advertisement_files",
             joinColumns = @JoinColumn(name = "advertisement_id"),
-            inverseJoinColumns = @JoinColumn(name = "file_id")
+            inverseJoinColumns = @JoinColumn(name = "system_file_id")
     )
-    private Set<File> files = new HashSet<>();
+    private Set<SystemFile> systemFiles = new HashSet<>();
 }
