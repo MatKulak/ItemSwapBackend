@@ -1,0 +1,1 @@
+ALTER TABLE public.advertisement ADD COLUMN condition character varying(255);

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import pl.mateusz.swap_items_backend.enums.Condition;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -35,9 +36,14 @@ public class Advertisement extends BaseEntity {
     @JoinColumn(name = "main_category_id", nullable = false)
     private MainCategory mainCategory;
 
+    @Enumerated(EnumType.STRING)
+    private Condition condition;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+
 
     @ManyToMany
     @JoinTable(
