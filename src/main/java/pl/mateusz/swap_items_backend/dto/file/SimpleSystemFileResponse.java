@@ -11,6 +11,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FileResponse {
+public class SimpleSystemFileResponse {
+
     private UUID id;
+    private int fileOrder;
 }

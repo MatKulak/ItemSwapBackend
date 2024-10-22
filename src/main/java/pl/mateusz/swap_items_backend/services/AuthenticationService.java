@@ -10,7 +10,6 @@ import pl.mateusz.swap_items_backend.dto.auth.LoginRequest;
 import pl.mateusz.swap_items_backend.dto.auth.AuthenticationResponse;
 import pl.mateusz.swap_items_backend.dto.auth.RegisterRequest;
 import pl.mateusz.swap_items_backend.dto.user.UserResponse;
-import pl.mateusz.swap_items_backend.entities.Role;
 import pl.mateusz.swap_items_backend.entities.Token;
 import pl.mateusz.swap_items_backend.entities.User;
 import pl.mateusz.swap_items_backend.enums.BasicRoles;
@@ -93,8 +92,8 @@ public class AuthenticationService {
 
         return UserResponse.builder()
                 .id(user.getId())
-                .name(user.getFirstName())
-                .surname(user.getLastName())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())

@@ -10,12 +10,23 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import pl.mateusz.swap_items_backend.dto.advertisement.AdvertisementWithFileResponse;
 import pl.mateusz.swap_items_backend.dto.advertisement.CreateAdvertisementRequest;
-import pl.mateusz.swap_items_backend.entities.*;
+import pl.mateusz.swap_items_backend.dto.advertisement.DetailedAdvertisementResponse;
+import pl.mateusz.swap_items_backend.dto.advertisement.DetailedAdvertisementWithFilesResponse;
+import pl.mateusz.swap_items_backend.entities.Advertisement;
+import pl.mateusz.swap_items_backend.entities.BaseEntity;
+import pl.mateusz.swap_items_backend.entities.Localization;
+import pl.mateusz.swap_items_backend.entities.MainCategory;
+import pl.mateusz.swap_items_backend.entities.SystemFile;
+import pl.mateusz.swap_items_backend.entities.User;
 import pl.mateusz.swap_items_backend.mappers.AdvertisementMapper;
+import pl.mateusz.swap_items_backend.mappers.LocalizationMapper;
 import pl.mateusz.swap_items_backend.repositories.AdvertisementRepository;
 
-import java.time.LocalDateTime;
-import java.util.*;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import static pl.mateusz.swap_items_backend.criteria.UserCriteria.updateCriteria;
 import static pl.mateusz.swap_items_backend.utils.Utils.*;
@@ -29,46 +40,12 @@ public class AdvertisementService {
     private final MainCategoryService mainCategoryService;
     private final LocalizationService localizationService;
 
-    public Advertisement getAdvertisementById(final UUID id) {
-        return getOrThrow(advertisementRepository.findById(id));
-    }
-
-//    @Transactional
-//    public void addAdvertisement(final CreateAdvertisementRequest request,
-//                                 final List<MultipartFile> files) {
-//
-//        final Localization localization = Localization.builder()
-//                .country(request.getCountry())
-//                .city(request.getCity())
-//                .postalCode(request.getPostalCode())
-//                .street(request.getStreet())
-//                .build();
-//
-//        final Localization savedLocalization = localizationService.save(localization);
-//
-//        final MainCategory mainCategory =
-//                mainCategoryService.getMainCategoryByName(request.getMainCategory());
-//
-//        final Advertisement advertisement = Advertisement.builder()
-//                .title(request.getTitle())
-//                .description(request.getDescription())
-//                .phoneNumber(request.getPhoneNumber())
-//                .localization(savedLocalization)
-//                .addDate(LocalDateTime.now())
-//                .mainCategory(mainCategory)
-//                .user(getLoggedUser())
-//                .followers(new HashSet<>())
-//                .systemFiles(systemFileService.prepareSystemFiles(files))
-//                .build();
-//
-//        advertisementRepository.save(advertisement);
-//    }
-
     @Transactional
     public void addAdvertisement(final CreateAdvertisementRequest request,
                                  final List<MultipartFile> files) {
         final MainCategory mainCategory = mainCategoryService.getMainCategoryByName(request.getMainCategory());
-        advertisementRepository.save(AdvertisementMapper.toEntity(request, mainCategory, systemFileService.prepareSystemFiles(files)));
+        final Localization localization = localizationService.save(LocalizationMapper.toEntity(request));
+        advertisementRepository.save(AdvertisementMapper.toEntity(request, mainCategory, systemFileService.prepareSystemFiles(files), localization));
     }
 
     public Page<AdvertisementWithFileResponse> getAll(Predicate predicate, final Pageable pageable, final MultiValueMap<String, String> parameters) {
@@ -88,61 +65,45 @@ public class AdvertisementService {
                 );
     }
 
-
-//    public Page<BasicAdvertisementWithImageResponse> getAll(Predicate predicate, final Pageable pageable, final MultiValueMap<String, String> parameters) {
-//        predicate = updateCriteria(predicate, parameters);
-//        final Page<Advertisement> advertisementPage = advertisementRepository.findAll(predicate, pageable);
+//    public DetailedAdvertisementWithFilesResponse getOneById(final UUID id) {
+//        final Advertisement advertisement = getAdvertisementById(id);
+//        final List<UUID> sortedFiles = toStream(advertisement.getSystemFiles())
+//                .sorted(Comparator.comparingInt(SystemFile::getFileOrder))
+//                .map(BaseEntity::getId)
+//                .toList();
 //
-//        if (advertisementPage.isEmpty()) {
-//            return new PageImpl<>(Collections.emptyList(), pageable, 0);
-//        }
-//
-//        final List<BasicAdvertisementWithImageResponse> responseList = toStream(advertisementPage.getContent())
-//                .map(advertisement -> {
-//                    final LocalizationResponse localizationResponse = LocalizationResponse.builder()
-//                            .city(advertisement.getLocalization().getCity())
-//                            .postalCode(advertisement.getLocalization().getPostalCode())
-//                            .street(advertisement.getLocalization().getStreet())
-//                            .build();
-//
-//                    final MainCategoryResponse mainCategoryResponse = MainCategoryResponse.builder()
-//                            .name(advertisement.getMainCategory().getName())
-//                            .build();
-//
-//                    final UserResponse userResponse = UserResponse.builder()
-//                            .id(advertisement.getUser().getId())
-//                            .name(advertisement.getUser().getFirstName())
-//                            .surname(advertisement.getUser().getLastName())
-//                            .username(advertisement.getUser().getUsername())
-//                            .email(advertisement.getUser().getEmail())
-//                            .phoneNumber(advertisement.getUser().getPhoneNumber())
-//                            .build();
-//
-//                    final AdvertisementResponse advertisementResponse = AdvertisementResponse.builder()
-//                            .id(advertisement.getId())
-//                            .title(advertisement.getTitle())
-//                            .description(advertisement.getDescription())
-//                            .phoneNumber(advertisement.getPhoneNumber())
-//                            .addDate(advertisement.getAddDate())
-//                            .localizationResponse(localizationResponse)
-//                            .mainCategoryResponse(mainCategoryResponse)
-//                            .userResponse(userResponse)
-//                            .build();
-//
-//                    final List<byte[]> files = toStream(prepareSortedFileIds(advertisement))
-//                            .map(systemFileService::getFileBySystemFileId)
-//                            .collect(Collectors.toList());
-//
-//                    return BasicAdvertisementWithImageResponse.builder()
-//                            .advertisementResponse(advertisementResponse)
-//                            .file(files)
-//                            .build();
-//
-//                }).toList();
-//
-//        return new PageImpl<>(responseList, pageable, advertisementPage.getTotalElements());
+//        return AdvertisementMapper.toDetailedAdvertisementWithFilesResponse(advertisement, sortedFiles);
 //    }
 
+    public DetailedAdvertisementResponse getOneById(final UUID id) {
+        return AdvertisementMapper.toDetailedAdvertisementResponse(getAdvertisementById(id));
+    }
+
+    public List<byte[]> getAdvertisementFiles(final UUID id) {
+        return toStream(getAdvertisementById(id).getSystemFiles())
+                .sorted(Comparator.comparingInt(SystemFile::getFileOrder))
+                .map(systemFile -> systemFileService.getFileBySystemFileId(systemFile.getId()))
+                .toList();
+    }
+
+    @Transactional
+    public boolean updateAdvertisementFollowers(final UUID id) {
+        final Advertisement advertisement = getAdvertisementById(id);
+        final User user = getLoggedUser();
+        final Set<User> advertisementFollowers = advertisement.getFollowers();
+        final boolean result;
+        if (!advertisementFollowers.contains(user)) {
+            advertisementFollowers.add(user);
+            result = true;
+        }
+        else {
+            advertisementFollowers.remove(user);
+            result = false;
+        }
+        advertisement.setFollowers(advertisementFollowers);
+        advertisementRepository.save(advertisement);
+        return result;
+    }
 
     private static List<UUID> prepareSortedFileIds(final Advertisement advertisement) {
         return advertisement.getSystemFiles().stream()
@@ -150,5 +111,11 @@ public class AdvertisementService {
                 .map(BaseEntity::getId)
                 .toList();
     }
+
+    private Advertisement getAdvertisementById(final UUID id) {
+        return getOrThrow(advertisementRepository.findById(id));
+    }
+
+
 
 }

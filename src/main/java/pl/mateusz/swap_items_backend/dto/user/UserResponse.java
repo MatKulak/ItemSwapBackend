@@ -13,8 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserResponse {
     private UUID id;
-    private String name;
-    private String surname;
+    private String firstName;
+    private String lastName;
     private String username;
     private String email;
     private String phoneNumber;

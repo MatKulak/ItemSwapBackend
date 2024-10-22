@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.mateusz.swap_items_backend.enums.Condition;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,6 +17,8 @@ public class CreateAdvertisementRequest {
     private String description;
     private String localization;
     private String phoneNumber;
+
+    @NotNull(message = "title can not be empty")
     private String title;
     private String country;
     private String city;

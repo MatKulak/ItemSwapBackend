@@ -1,7 +1,7 @@
 package pl.mateusz.swap_items_backend.mappers;
 
-import org.springframework.cglib.core.Local;
 import pl.mateusz.swap_items_backend.dto.advertisement.CreateAdvertisementRequest;
+import pl.mateusz.swap_items_backend.dto.localization.LocalizationResponse;
 import pl.mateusz.swap_items_backend.entities.Localization;
 
 public class LocalizationMapper {
@@ -14,6 +14,16 @@ public class LocalizationMapper {
                 .city(createAdvertisementRequest.getCity())
                 .postalCode(createAdvertisementRequest.getPostalCode())
                 .street(createAdvertisementRequest.getStreet())
+                .build();
+    }
+
+    public static LocalizationResponse toResponse(final Localization localization) {
+        if (localization == null) return null;
+
+        return LocalizationResponse.builder()
+                .city(localization.getCity())
+                .postalCode(localization.getPostalCode())
+                .street(localization.getStreet())
                 .build();
     }
 }
