@@ -75,6 +75,8 @@ public class SystemFileService {
                 .findFirst()
                 .orElse(null);
 
+        if (fileToReturn == null) return null;
+
         return Try.of(() -> Files.readAllBytes(Paths.get(fileToReturn.getAbsolutePath())))
                 .getOrElseThrow((ex) -> new RuntimeException(ex));
     }

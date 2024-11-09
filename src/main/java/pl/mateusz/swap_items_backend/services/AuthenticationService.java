@@ -1,9 +1,11 @@
 package pl.mateusz.swap_items_backend.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.mateusz.swap_items_backend.dto.auth.LoginRequest;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import static pl.mateusz.swap_items_backend.others.Messages.*;
 import static pl.mateusz.swap_items_backend.others.Messages.PHONE_NUMBER_ALREADY_EXISTS;
+import static pl.mateusz.swap_items_backend.utils.Utils.getOrThrow;
 
 @Service
 @RequiredArgsConstructor
@@ -118,5 +121,21 @@ public class AuthenticationService {
                 .build();
 
         return tokenRepository.save(token);
+    }
+
+    public boolean isLoggedIn(final HttpServletRequest request) {
+        final String token = extractTokenFromRequest(request);
+        if (token != null) {
+            final String username = jwtService.extractUsername(token);
+            final UserDetails userDetails = getOrThrow(userRepository.findByUsername(username));
+            return jwtService.isTokenValid(token, userDetails);
+        }
+        return false;
+    }
+
+    private String extractTokenFromRequest(final HttpServletRequest request) {
+        final String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) return authHeader.substring(7);
+        return null;
     }
 }
