@@ -1,10 +1,6 @@
 package pl.mateusz.swap_items_backend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +24,7 @@ public class Conversation extends BaseEntity {
     @JoinColumn(name = "participant_id", nullable = false)
     private User participant;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "conversation_messages",
             joinColumns = @JoinColumn(name = "conversation_id"),

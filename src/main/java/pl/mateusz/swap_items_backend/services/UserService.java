@@ -6,7 +6,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.mateusz.swap_items_backend.dto.validation.SimpleValidationRequest;
+import pl.mateusz.swap_items_backend.entities.User;
 import pl.mateusz.swap_items_backend.repositories.UserRepository;
+
+import java.util.UUID;
+
+import static pl.mateusz.swap_items_backend.utils.Utils.getOrThrow;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +34,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Entity not found"));
+    }
+
+    public User getUserById(final UUID userId) {
+        return getOrThrow(userRepository.findById(userId));
     }
 }

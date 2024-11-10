@@ -65,16 +65,6 @@ public class AdvertisementService {
                 );
     }
 
-//    public DetailedAdvertisementWithFilesResponse getOneById(final UUID id) {
-//        final Advertisement advertisement = getAdvertisementById(id);
-//        final List<UUID> sortedFiles = toStream(advertisement.getSystemFiles())
-//                .sorted(Comparator.comparingInt(SystemFile::getFileOrder))
-//                .map(BaseEntity::getId)
-//                .toList();
-//
-//        return AdvertisementMapper.toDetailedAdvertisementWithFilesResponse(advertisement, sortedFiles);
-//    }
-
     public DetailedAdvertisementResponse getOneById(final UUID id) {
         return AdvertisementMapper.toDetailedAdvertisementResponse(getAdvertisementById(id));
     }
@@ -112,10 +102,7 @@ public class AdvertisementService {
                 .toList();
     }
 
-    private Advertisement getAdvertisementById(final UUID id) {
+    public Advertisement getAdvertisementById(final UUID id) {
         return getOrThrow(advertisementRepository.findById(id));
     }
-
-
-
 }
