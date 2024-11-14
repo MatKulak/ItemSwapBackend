@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.mateusz.swap_items_backend.dto.advertisement.AdvertisementWithFileResponse;
 import pl.mateusz.swap_items_backend.dto.advertisement.CreateAdvertisementRequest;
 import pl.mateusz.swap_items_backend.dto.advertisement.DetailedAdvertisementResponse;
-import pl.mateusz.swap_items_backend.dto.advertisement.DetailedAdvertisementWithFilesResponse;
 import pl.mateusz.swap_items_backend.entities.Advertisement;
 import pl.mateusz.swap_items_backend.entities.BaseEntity;
 import pl.mateusz.swap_items_backend.entities.Localization;
@@ -28,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static pl.mateusz.swap_items_backend.criteria.UserCriteria.updateCriteria;
+import static pl.mateusz.swap_items_backend.criteria.AdvertisementCriteria.updateCriteria;
 import static pl.mateusz.swap_items_backend.utils.Utils.*;
 
 @Service
@@ -104,5 +103,9 @@ public class AdvertisementService {
 
     public Advertisement getAdvertisementById(final UUID id) {
         return getOrThrow(advertisementRepository.findById(id));
+    }
+
+    public Advertisement getAdvertisementByUserId(final UUID userId) {
+        return getOrThrow(advertisementRepository.findAdvertisementByUserId(userId));
     }
 }

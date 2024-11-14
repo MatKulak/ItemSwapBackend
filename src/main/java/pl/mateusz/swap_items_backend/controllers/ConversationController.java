@@ -8,7 +8,6 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import pl.mateusz.swap_items_backend.dto.advertisement.AdvertisementWithFileResponse;
 import pl.mateusz.swap_items_backend.dto.conversation.ConversationResponse;
 import pl.mateusz.swap_items_backend.dto.conversation.SimpleConversationResponse;
 import pl.mateusz.swap_items_backend.entities.Advertisement;
@@ -23,14 +22,14 @@ import java.util.UUID;
 public class ConversationController {
 
     private static final String API_CONVERSATIONS = "/api/conversations";
+    private static final String API_CONVERSATION = "/api/conversation";
     private static final String API_CONVERSATIONS_PAGE = API_CONVERSATIONS + "/page";
-    private static final String API_CONVERSATION = API_CONVERSATIONS + "/{id}";
 
     private final ConversationService conversationService;
 
     @GetMapping(API_CONVERSATION)
-    public ConversationResponse getOneByAdvertisementId(@PathVariable("id") final UUID advertisementId) {
-        return ConversationMapper.toConversationResponse(conversationService.getConversationByAdvertisementId(advertisementId));
+    public ConversationResponse getOneByAdvertisementId(@RequestParam final UUID advertisementId, @RequestParam(required = false) final UUID participantId) {
+        return ConversationMapper.toConversationResponse(conversationService.getConversationByAdvertisementId(advertisementId, participantId));
     }
 
     @GetMapping(API_CONVERSATIONS_PAGE)

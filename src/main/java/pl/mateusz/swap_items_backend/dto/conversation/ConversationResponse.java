@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import pl.mateusz.swap_items_backend.dto.message.MessageResponse;
 import pl.mateusz.swap_items_backend.dto.user.UserResponse;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,5 +19,5 @@ public class ConversationResponse {
     private UUID id;
     private UserResponse seller;
     private UserResponse buyer;
-    private Set<MessageResponse> messages;
+    private List<MessageResponse> messages;
 }

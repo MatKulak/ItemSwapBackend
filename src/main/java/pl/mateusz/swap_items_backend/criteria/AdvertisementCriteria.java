@@ -7,12 +7,12 @@ import pl.mateusz.swap_items_backend.entities.QAdvertisement;
 
 import static pl.mateusz.swap_items_backend.utils.Utils.getLoggedUser;
 
-public class UserCriteria {
+public class AdvertisementCriteria {
 
     public static Predicate updateCriteria(final Predicate predicate, final MultiValueMap<String, String> params) {
         final QAdvertisement qAdvertisement = QAdvertisement.advertisement;
-        final String filter = params.getFirst("filter");
         final BooleanBuilder builder = new BooleanBuilder();
+        final String filter = params.getFirst("filter");
 
         if (filter != null && filter.equals("user")) builder.and(qAdvertisement.user.id.eq(getLoggedUser().getId()));
 
@@ -21,6 +21,11 @@ public class UserCriteria {
 
         if (filter != null && filter.equals("all"))
             builder.and(qAdvertisement.user.id.eq(getLoggedUser().getId()).not());
+
+        final String query = params.getFirst("query");
+
+        if (query != null && !query.isEmpty())
+            builder.and(qAdvertisement.title.lower().like("%" + query.toLowerCase() + "%"));
 
         builder.and(predicate);
         return builder;

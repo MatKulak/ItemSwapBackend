@@ -19,6 +19,7 @@ public class ConversationCriteria {
         final UUID loggedUserId = Utils.getLoggedUserId();
 
         builder.and(conversation.participant.id.eq(loggedUserId).or(advertisement.user.id.eq(loggedUserId)));
-        return predicate;
+        builder.and(predicate);
+        return builder;
     }
 }

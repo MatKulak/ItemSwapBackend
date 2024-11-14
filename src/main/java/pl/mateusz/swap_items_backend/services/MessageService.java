@@ -32,11 +32,12 @@ public class MessageService {
         final LocalDateTime currentTime = LocalDateTime.now();
         final Advertisement advertisement = advertisementService.getAdvertisementById(messageRequest.getAdvertisementId());
         final User user = userService.getUserById(senderId);
+        final Conversation conversation;
 
         if (conversationId == null) {
-            createNewConversation(messageRequest, currentTime, user, advertisement);
+            conversation = createNewConversation(messageRequest, currentTime, user, advertisement);
         } else {
-            updateConversation(conversationId, messageRequest, user, currentTime);
+            conversation = updateConversation(conversationId, messageRequest, user, currentTime);
         }
 
         final MessageResponse messageResponse = MessageResponse.builder()
@@ -48,11 +49,11 @@ public class MessageService {
 
         return MessageResponseWithReceivers.builder()
                 .messageResponse(messageResponse)
-                .receiverIds(Set.of(senderId, advertisement.getUser().getId()))
+                .receiverIds(Set.of(conversation.getAdvertisement().getUser().getId(), conversation.getParticipant().getId()))
                 .build();
     }
 
-    private void createNewConversation(final MessageRequest messageRequest, final LocalDateTime currentTime,
+    private Conversation createNewConversation(final MessageRequest messageRequest, final LocalDateTime currentTime,
                                        final User user, final Advertisement advertisement) {
 
         final Message message = Message.builder()
@@ -67,10 +68,10 @@ public class MessageService {
                 .messages(Set.of(message))
                 .build();
 
-        conversationService.save(conversation);
+        return conversationService.save(conversation);
     }
 
-    private void updateConversation(final UUID conversationId, final MessageRequest messageRequest, final User user, final LocalDateTime currentTime) {
+    private Conversation updateConversation(final UUID conversationId, final MessageRequest messageRequest, final User user, final LocalDateTime currentTime) {
 
         final Conversation conversation = conversationService.getConversationById(conversationId);
         final Set<Message> messages = conversation.getMessages();
@@ -83,6 +84,6 @@ public class MessageService {
 
         messages.add(message);
         conversation.setMessages(messages);
-        conversationService.save(conversation);
+        return conversationService.save(conversation);
     }
 }
