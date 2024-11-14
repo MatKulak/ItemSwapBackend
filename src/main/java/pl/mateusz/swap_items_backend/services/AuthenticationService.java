@@ -57,9 +57,6 @@ public class AuthenticationService {
 
     @Transactional
     public AuthenticationResponse register(final RegisterRequest registerRequest) {
-        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))
-            throw new RuntimeException(NON_MATCHING_PASSWORDS);
-
         if (userRepository.existsByUsername(registerRequest.getUsername()))
             throw new RuntimeException(USERNAME_ALREADY_EXISTS);
 

@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping(API_USERS_VALIDATE)
+    @PostMapping(API_USERS_VALIDATE)
     public Boolean validate(@RequestBody final SimpleValidationRequest simpleValidationRequest) {
         return userService.validate(simpleValidationRequest);
     }

@@ -14,29 +14,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank(message = "Name is required")
+    @NotBlank
+    @Size(min = 3, max = 255)
     private String firstName;
 
-    @NotBlank(message = "Surname is required")
+    @NotBlank
+    @Size(min = 3, max = 255)
     private String lastName;
 
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    @NotBlank
+    @Size(min = 3, max = 255)
     private String username;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Please provide a valid email address")
+    @NotBlank
+    @Email
+    @Size(min = 3, max = 255)
     private String email;
 
-    @NotBlank(message = "Phone number is required")
-    @Size(min = 9, max = 9, message = "Phone number must 9 digit long")
+    @NotBlank
+    @Size(min = 9, max = 9)
     private String phoneNumber;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @NotBlank
+    @Size(min = 6)
+    @Size(min = 3, max = 255)
     private String password;
-
-    @NotBlank(message = "Confirm password is required")
-    @Size(min = 8, message = "Confirm password must be at least 8 characters long")
-    private String confirmPassword;
 }
