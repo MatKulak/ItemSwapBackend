@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static pl.mateusz.swap_items_backend.utils.Utils.getLoggedUser;
+import static pl.mateusz.swap_items_backend.utils.Utils.isNullOrEmpty;
 
 public class AdvertisementMapper {
 
@@ -44,13 +45,15 @@ public class AdvertisementMapper {
     public static Advertisement toEntity(final CreateAdvertisementRequest createAdvertisementRequest,
                                          final MainCategory mainCategory,
                                          final Set<SystemFile> systemFiles,
-                                         final Localization localization) {
+                                         final Localization localization,
+                                         final String phoneNumber) {
         if (createAdvertisementRequest == null) return null;
 
         return Advertisement.builder()
                 .title(createAdvertisementRequest.getTitle())
                 .description(createAdvertisementRequest.getDescription())
-                .phoneNumber(createAdvertisementRequest.getPhoneNumber())
+                .phoneNumber(isNullOrEmpty(createAdvertisementRequest.getPhoneNumber()) ? phoneNumber :
+                        createAdvertisementRequest.getPhoneNumber())
                 .addDate(LocalDateTime.now())
                 .mainCategory(mainCategory)
                 .localization(localization)

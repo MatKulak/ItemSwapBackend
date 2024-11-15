@@ -10,7 +10,7 @@ public class LocalizationMapper {
         if (createAdvertisementRequest == null) return null;
 
         return Localization.builder()
-                .country(createAdvertisementRequest.getCountry() == null ? "PL" : createAdvertisementRequest.getCountry())
+                .country("PL")
                 .city(createAdvertisementRequest.getCity())
                 .postalCode(createAdvertisementRequest.getPostalCode())
                 .street(createAdvertisementRequest.getStreet())

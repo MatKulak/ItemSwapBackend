@@ -40,4 +40,8 @@ public class Utils {
         return Stream.ofNullable(collection).flatMap(Collection::stream);
     }
 
+    public static boolean isNullOrEmpty(final String string) {
+        return string == null || string.isEmpty();
+    }
+
 }

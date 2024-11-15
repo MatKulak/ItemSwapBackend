@@ -42,9 +42,10 @@ public class AdvertisementService {
     @Transactional
     public void addAdvertisement(final CreateAdvertisementRequest request,
                                  final List<MultipartFile> files) {
-        final MainCategory mainCategory = mainCategoryService.getMainCategoryByName(request.getMainCategory());
+        final MainCategory mainCategory = mainCategoryService.getMainCategoryByName(request.getCategory());
         final Localization localization = localizationService.save(LocalizationMapper.toEntity(request));
-        advertisementRepository.save(AdvertisementMapper.toEntity(request, mainCategory, systemFileService.prepareSystemFiles(files), localization));
+        final String phoneNumber = getLoggedUser().getPhoneNumber();
+        advertisementRepository.save(AdvertisementMapper.toEntity(request, mainCategory, systemFileService.prepareSystemFiles(files), localization, phoneNumber));
     }
 
     public Page<AdvertisementWithFileResponse> getAll(Predicate predicate, final Pageable pageable, final MultiValueMap<String, String> parameters) {
