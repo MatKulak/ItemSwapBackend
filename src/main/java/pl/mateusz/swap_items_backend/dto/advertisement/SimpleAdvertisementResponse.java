@@ -21,5 +21,7 @@ public class SimpleAdvertisementResponse {
     private String title;
     private Condition condition;
     private String city;
+    private String street;
+    private String postalCode;
     private LocalDateTime addDate;
 }

@@ -21,4 +21,6 @@ public class DetailedAdvertisementResponse extends SimpleAdvertisementResponse {
     private UserResponse userResponse;
     @JsonProperty("isFollowed")
     private boolean isFollowed;
+    private String category;
+    private String phoneNumber;
 }

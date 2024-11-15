@@ -28,6 +28,8 @@ public class AdvertisementMapper {
                 .id(advertisement.getId())
                 .title(advertisement.getTitle())
                 .city(advertisement.getLocalization().getCity())
+                .street(advertisement.getLocalization().getStreet())
+                .postalCode(advertisement.getLocalization().getPostalCode())
                 .condition(advertisement.getCondition())
                 .addDate(advertisement.getAddDate())
                 .build();
@@ -60,6 +62,7 @@ public class AdvertisementMapper {
                 .user(getLoggedUser())
                 .followers(new HashSet<>())
                 .systemFiles(systemFiles)
+                .condition(createAdvertisementRequest.getCondition())
                 .build();
     }
 
@@ -76,6 +79,8 @@ public class AdvertisementMapper {
                 .description(advertisement.getDescription())
                 .localizationResponse(LocalizationMapper.toResponse(advertisement.getLocalization()))
                 .userResponse(UserMapper.toResponse(advertisement.getUser()))
+                .category(advertisement.getMainCategory().getName())
+                .phoneNumber(advertisement.getPhoneNumber())
                 .build();
 
     }
