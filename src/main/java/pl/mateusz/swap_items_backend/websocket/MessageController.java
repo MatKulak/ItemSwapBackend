@@ -14,8 +14,8 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
+    @MessageMapping("/message")
+    @SendTo("/topic/message")
     public MessageResponseWithReceivers sendMessage(final MessageRequest request) {
         return messageService.sendMessage(request);
     }

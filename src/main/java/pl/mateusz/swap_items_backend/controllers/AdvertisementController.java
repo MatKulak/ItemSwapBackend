@@ -7,7 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.mateusz.swap_items_backend.dto.advertisement.AdvertisementWithFileResponse;
 import pl.mateusz.swap_items_backend.dto.advertisement.CreateAdvertisementRequest;
@@ -30,6 +37,7 @@ public class AdvertisementController {
     private static final String API_ADVERTISEMENT_FILES = API_ADVERTISEMENT + "/files";
     private static final String API_ADVERTISEMENT_FOLLOWERS = API_ADVERTISEMENT + "/followers";
     private static final String API_ADVERTISEMENT_UPDATE = API_ADVERTISEMENT + "/update";
+
     private final AdvertisementService advertisementService;
 
     @PostMapping(API_ADVERTISEMENTS_ADD)

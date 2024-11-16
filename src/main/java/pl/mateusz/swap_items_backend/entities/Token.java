@@ -1,6 +1,5 @@
 package pl.mateusz.swap_items_backend.entities;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

@@ -11,6 +11,7 @@ import pl.mateusz.swap_items_backend.dto.user.UserResponse;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
+
     private String token;
     private UserResponse userResponse;
 }

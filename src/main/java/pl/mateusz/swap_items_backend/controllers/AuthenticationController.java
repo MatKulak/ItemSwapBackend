@@ -4,7 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.mateusz.swap_items_backend.dto.auth.LoginRequest;
 import pl.mateusz.swap_items_backend.dto.auth.AuthenticationResponse;
 import pl.mateusz.swap_items_backend.dto.auth.RegisterRequest;
@@ -17,6 +23,7 @@ import java.util.UUID;
 @RequestMapping
 @RequiredArgsConstructor
 public class AuthenticationController {
+
     private static final String AUTH = "/auth";
     private static final String AUTH_REGISTER = AUTH + "/register";
     private static final String AUTH_LOGIN = AUTH + "/login";

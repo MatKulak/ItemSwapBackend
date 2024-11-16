@@ -7,5 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SystemFileRepository extends JpaRepository<SystemFile, UUID> {
+
     Optional<SystemFile> findFileById(final UUID id);
 }

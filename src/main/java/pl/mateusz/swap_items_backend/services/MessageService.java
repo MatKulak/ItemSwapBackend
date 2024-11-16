@@ -10,7 +10,6 @@ import pl.mateusz.swap_items_backend.entities.Advertisement;
 import pl.mateusz.swap_items_backend.entities.Conversation;
 import pl.mateusz.swap_items_backend.entities.Message;
 import pl.mateusz.swap_items_backend.entities.User;
-import pl.mateusz.swap_items_backend.utils.Utils;
 
 import java.time.LocalDateTime;
 import java.util.Set;

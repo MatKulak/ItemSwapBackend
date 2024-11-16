@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface ConversationRepository extends JpaRepository<Conversation, UUID>, QuerydslPredicateExecutor<Conversation> {
 
     Optional<Conversation> findConversationByAdvertisementIdAndParticipantId(final UUID advertisementId, final UUID participantId);
+    Optional<Conversation> findConversationByParticipantIdAndAdvertisementId(final UUID participantId, final UUID advertisementId);
 
     @Query("""
             SELECT conversation FROM Conversation conversation
@@ -22,6 +23,4 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
             OR advertisement.user.id = :participantId)
             """)
     List<Conversation> findAllConversationsByAdvertisementIdAndParticipantId(final UUID advertisementId, final UUID participantId);
-
-    Optional<Conversation> findConversationByParticipantIdAndAdvertisementId(final UUID participantId, final UUID advertisementId);
 }

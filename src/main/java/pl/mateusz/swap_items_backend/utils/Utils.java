@@ -50,5 +50,4 @@ public class Utils {
     public static boolean isNullOrEmpty(final String string) {
         return string == null || string.isEmpty();
     }
-
 }

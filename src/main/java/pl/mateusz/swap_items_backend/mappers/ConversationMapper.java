@@ -7,7 +7,6 @@ import pl.mateusz.swap_items_backend.entities.Conversation;
 
 import java.util.Comparator;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static pl.mateusz.swap_items_backend.utils.Utils.toStream;
 

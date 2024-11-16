@@ -11,6 +11,7 @@ import pl.mateusz.swap_items_backend.repositories.UserRepository;
 
 import java.util.UUID;
 
+import static pl.mateusz.swap_items_backend.others.Messages.ENTITY_NOT_FOUND;
 import static pl.mateusz.swap_items_backend.utils.Utils.*;
 
 @Service
@@ -33,7 +34,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Entity not found"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(ENTITY_NOT_FOUND));
     }
 
     public User getUserById(final UUID userId) {
