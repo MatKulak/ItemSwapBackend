@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import pl.mateusz.swap_items_backend.dto.auth.LoginRequest;
 import pl.mateusz.swap_items_backend.dto.auth.AuthenticationResponse;
 import pl.mateusz.swap_items_backend.dto.auth.RegisterRequest;
+import pl.mateusz.swap_items_backend.dto.user.UpdateUserRequest;
 import pl.mateusz.swap_items_backend.services.AuthenticationService;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping
@@ -18,6 +21,7 @@ public class AuthenticationController {
     private static final String AUTH_REGISTER = AUTH + "/register";
     private static final String AUTH_LOGIN = AUTH + "/login";
     private static final String AUTH_LOGGED_IN = AUTH + "/logged-in";
+    private static final String AUTH_UPDATE = AUTH + "/{id}/update";
 
     private final AuthenticationService authenticationService;
 
@@ -35,5 +39,10 @@ public class AuthenticationController {
     public ResponseEntity<Boolean> isLoggedIn(final HttpServletRequest request) {
         boolean isLoggedIn = authenticationService.isLoggedIn(request);
         return isLoggedIn ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+
+    @PatchMapping(AUTH_UPDATE)
+    public ResponseEntity<AuthenticationResponse> update(@PathVariable final UUID id, final @RequestBody UpdateUserRequest updateUserRequest) {
+        return ResponseEntity.ok(authenticationService.updateUser(id, updateUserRequest));
     }
 }

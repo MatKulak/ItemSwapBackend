@@ -1,5 +1,7 @@
 package pl.mateusz.swap_items_backend.utils;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import pl.mateusz.swap_items_backend.entities.User;
 
@@ -14,6 +16,11 @@ public class Utils {
 
     public static Object getPrincipal() {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public static boolean isUserLoggedIn() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
     public static UUID getLoggedUserId() {

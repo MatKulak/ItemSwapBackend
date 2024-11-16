@@ -35,8 +35,5 @@ public class RegisterRequest {
     @Size(min = 9, max = 9)
     private String phoneNumber;
 
-    @NotBlank
-    @Size(min = 6)
-    @Size(min = 3, max = 255)
     private String password;
 }

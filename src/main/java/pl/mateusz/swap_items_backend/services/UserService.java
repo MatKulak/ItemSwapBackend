@@ -11,7 +11,7 @@ import pl.mateusz.swap_items_backend.repositories.UserRepository;
 
 import java.util.UUID;
 
-import static pl.mateusz.swap_items_backend.utils.Utils.getOrThrow;
+import static pl.mateusz.swap_items_backend.utils.Utils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +22,22 @@ public class UserService implements UserDetailsService {
 
     public Boolean validate(final SimpleValidationRequest simpleValidationRequest) {
         final String value = simpleValidationRequest.getValue();
+        final String property = simpleValidationRequest.getProperty();
+
+        User loggedUser = null;
+        if (isUserLoggedIn()) loggedUser = getLoggedUser();
+
+        if (loggedUser != null && property.equals("email") && value.equals(loggedUser.getEmail())) {
+            return false;
+        }
+
+        if (loggedUser != null && property.equals("username") && value.equals(loggedUser.getUsername())) {
+            return false;
+        }
+
+        if (loggedUser != null && property.equals("phoneNumber") && value.equals(loggedUser.getPhoneNumber())) {
+            return false;
+        }
 
         return switch (simpleValidationRequest.getProperty()) {
             case "email" -> userRepository.existsByEmail(value);

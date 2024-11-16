@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import pl.mateusz.swap_items_backend.dto.auth.LoginRequest;
 import pl.mateusz.swap_items_backend.dto.auth.AuthenticationResponse;
 import pl.mateusz.swap_items_backend.dto.auth.RegisterRequest;
+import pl.mateusz.swap_items_backend.dto.user.UpdateUserRequest;
 import pl.mateusz.swap_items_backend.dto.user.UserResponse;
 import pl.mateusz.swap_items_backend.entities.Token;
 import pl.mateusz.swap_items_backend.entities.User;
@@ -22,6 +23,7 @@ import pl.mateusz.swap_items_backend.security.RoleService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static pl.mateusz.swap_items_backend.others.Messages.*;
 import static pl.mateusz.swap_items_backend.others.Messages.PHONE_NUMBER_ALREADY_EXISTS;
@@ -79,6 +81,28 @@ public class AuthenticationService {
         final User savedUser = userRepository.save(user);
         final UserResponse userResponse = toUserResponse(savedUser);
         final String token = jwtService.generateToken(savedUser);
+        saveUserToken(token, savedUser);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .userResponse(userResponse)
+                .build();
+    }
+
+    @Transactional
+    public AuthenticationResponse updateUser(final UUID id, final UpdateUserRequest updateUserRequest) {
+        final User user = getOrThrow(userRepository.findById(id));
+        user.setFirstName(updateUserRequest.getFirstName());
+        user.setLastName(updateUserRequest.getLastName());
+        user.setUsername(updateUserRequest.getUsername());
+        user.setPhoneNumber(updateUserRequest.getPhoneNumber());
+        user.setEmail(updateUserRequest.getEmail());
+        if (updateUserRequest.isUpdatePassword())
+            user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
+
+        final User savedUser = userRepository.save(user);
+        final String token = jwtService.generateToken(savedUser);
+        final UserResponse userResponse = toUserResponse(savedUser);
         saveUserToken(token, savedUser);
 
         return AuthenticationResponse.builder()
