@@ -48,6 +48,14 @@ public class AdvertisementService {
         advertisementRepository.save(AdvertisementMapper.toEntity(request, mainCategory, systemFileService.prepareSystemFiles(files), localization, phoneNumber));
     }
 
+    @Transactional
+    public void updateAdvertisement(final UUID id,
+                                    final CreateAdvertisementRequest createAdvertisementRequest,
+                                    final List<MultipartFile> files) {
+        final Advertisement advertisement = getOrThrow(advertisementRepository.findById(id));
+        advertisementRepository.save(update(advertisement, createAdvertisementRequest, files));
+    }
+
     public Page<AdvertisementWithFileResponse> getAll(Predicate predicate, final Pageable pageable, final MultiValueMap<String, String> parameters) {
         predicate = updateCriteria(predicate, parameters);
         return advertisementRepository.findAll(predicate, pageable)
@@ -108,5 +116,18 @@ public class AdvertisementService {
 
     public Advertisement getAdvertisementByUserId(final UUID userId) {
         return getOrThrow(advertisementRepository.findAdvertisementByUserId(userId));
+    }
+
+    private Advertisement update(final Advertisement advertisement,
+                                 final CreateAdvertisementRequest request,
+                                 final List<MultipartFile> files) {
+        advertisement.setMainCategory(mainCategoryService.getMainCategoryByName(request.getCategory()));
+        advertisement.setCondition(request.getCondition());
+        advertisement.setTitle(request.getTitle());
+        advertisement.setDescription(request.getDescription());
+        advertisement.setLocalization(localizationService.save(LocalizationMapper.toEntity(request)));
+        advertisement.setPhoneNumber(isNullOrEmpty(request.getPhoneNumber()) ? getLoggedUser().getPhoneNumber() : request.getPhoneNumber());
+        advertisement.setSystemFiles(systemFileService.prepareSystemFiles(files));
+        return advertisement;
     }
 }

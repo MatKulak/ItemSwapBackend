@@ -29,12 +29,20 @@ public class AdvertisementController {
     private static final String API_ADVERTISEMENT = API_ADVERTISEMENTS + "/{id}";
     private static final String API_ADVERTISEMENT_FILES = API_ADVERTISEMENT + "/files";
     private static final String API_ADVERTISEMENT_FOLLOWERS = API_ADVERTISEMENT + "/followers";
+    private static final String API_ADVERTISEMENT_UPDATE = API_ADVERTISEMENT + "/update";
     private final AdvertisementService advertisementService;
 
     @PostMapping(API_ADVERTISEMENTS_ADD)
     public void addAdvertisement(final @RequestPart("data") CreateAdvertisementRequest createAdvertisementRequest,
                                  final @RequestPart("files") List<MultipartFile> files) {
         advertisementService.addAdvertisement(createAdvertisementRequest, files);
+    }
+
+    @PatchMapping(API_ADVERTISEMENT_UPDATE)
+    public void updateAdvertisement(final @PathVariable("id")UUID id,
+                                    final @RequestPart("data") CreateAdvertisementRequest createAdvertisementRequest,
+                                    final @RequestPart("files") List<MultipartFile> files) {
+        advertisementService.updateAdvertisement(id, createAdvertisementRequest, files);
     }
 
     @GetMapping(API_ADVERTISEMENTS_PAGE)
