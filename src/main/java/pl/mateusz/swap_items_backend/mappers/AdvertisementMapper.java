@@ -1,5 +1,6 @@
 package pl.mateusz.swap_items_backend.mappers;
 
+import pl.mateusz.swap_items_backend.dto.advertisement.AdvertisementTradeDetails;
 import pl.mateusz.swap_items_backend.dto.advertisement.AdvertisementWithFileResponse;
 import pl.mateusz.swap_items_backend.dto.advertisement.CreateAdvertisementRequest;
 import pl.mateusz.swap_items_backend.dto.advertisement.DetailedAdvertisementResponse;
@@ -32,6 +33,7 @@ public class AdvertisementMapper {
                 .postalCode(advertisement.getLocalization().getPostalCode())
                 .condition(advertisement.getCondition())
                 .addDate(advertisement.getAddDate())
+                .trade(advertisement.getTrade())
                 .build();
     }
 
@@ -63,6 +65,7 @@ public class AdvertisementMapper {
                 .followers(new HashSet<>())
                 .systemFiles(systemFiles)
                 .condition(createAdvertisementRequest.getCondition())
+                .trade(createAdvertisementRequest.getTrade())
                 .build();
     }
 
@@ -81,8 +84,8 @@ public class AdvertisementMapper {
                 .userResponse(UserMapper.toResponse(advertisement.getUser()))
                 .category(advertisement.getMainCategory().getName())
                 .phoneNumber(advertisement.getPhoneNumber())
+                .trade(advertisement.getTrade())
                 .build();
-
     }
 
     public static DetailedAdvertisementWithFilesResponse toDetailedAdvertisementWithFilesResponse(final Advertisement advertisement, final List<UUID> fileIds) {
@@ -91,6 +94,16 @@ public class AdvertisementMapper {
         return DetailedAdvertisementWithFilesResponse.builder()
                 .detailedAdvertisement(toDetailedAdvertisementResponse(advertisement))
                 .fileIds(fileIds)
+                .build();
+    }
+
+    public static AdvertisementTradeDetails toAdvertisementTradeDetails(final Advertisement advertisement) {
+        if (advertisement == null) return null;
+
+        return AdvertisementTradeDetails.builder()
+                .id(advertisement.getId())
+                .have(advertisement.getTitle())
+                .want(advertisement.getTrade())
                 .build();
     }
 }

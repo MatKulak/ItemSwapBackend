@@ -23,4 +23,5 @@ public class DetailedAdvertisementResponse extends SimpleAdvertisementResponse {
     private boolean isFollowed;
     private String category;
     private String phoneNumber;
+    private String trade;
 }

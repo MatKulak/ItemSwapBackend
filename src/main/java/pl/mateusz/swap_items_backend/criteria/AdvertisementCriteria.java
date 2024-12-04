@@ -5,6 +5,10 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.util.MultiValueMap;
 import pl.mateusz.swap_items_backend.entities.QAdvertisement;
 
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import static pl.mateusz.swap_items_backend.utils.Utils.getLoggedUser;
 
 public class AdvertisementCriteria {
@@ -26,6 +30,17 @@ public class AdvertisementCriteria {
 
         if (query != null && !query.isEmpty())
             builder.and(qAdvertisement.title.lower().like("%" + query.toLowerCase() + "%"));
+
+        builder.and(predicate);
+        return builder;
+    }
+
+    public static Predicate addAdvertisementsIdsToCriteria(final Predicate predicate, final List<UUID> advertisementsIds, final Set<UUID> userAdvertisementsIds) {
+        final QAdvertisement qAdvertisement = QAdvertisement.advertisement;
+        final BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(qAdvertisement.id.in(advertisementsIds));
+        builder.and(qAdvertisement.id.in(userAdvertisementsIds).not());
 
         builder.and(predicate);
         return builder;

@@ -45,4 +45,8 @@ public class CreateAdvertisementRequest {
     private String postalCode;
 
     private String phoneNumber;
+
+    @NotNull
+    @Size(min = 3, max = 255)
+    private String trade;
 }

@@ -24,4 +24,5 @@ public class SimpleAdvertisementResponse {
     private String street;
     private String postalCode;
     private LocalDateTime addDate;
+    private String trade;
 }

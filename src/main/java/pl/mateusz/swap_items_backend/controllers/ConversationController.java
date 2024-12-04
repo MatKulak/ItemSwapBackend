@@ -31,7 +31,7 @@ public class ConversationController {
     private final ConversationService conversationService;
 
     @GetMapping(API_CONVERSATION)
-    public ConversationResponse getOneByAdvertisementId(@RequestParam final UUID advertisementId, @RequestParam(required = false) final UUID participantId) {
+    public ConversationResponse getOneByAdvertisementIdAndParticipantId(@RequestParam final UUID advertisementId, @RequestParam(required = false) final UUID participantId) {
         return ConversationMapper.toConversationResponse(conversationService.getConversationByAdvertisementId(advertisementId, participantId));
     }
 

@@ -65,4 +65,6 @@ public class Advertisement extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "system_file_id")
     )
     private Set<SystemFile> systemFiles = new HashSet<>();
+
+    private String trade;
 }
