@@ -49,6 +49,7 @@ public class MessageService {
         return MessageResponseWithReceivers.builder()
                 .messageResponse(messageResponse)
                 .receiverIds(Set.of(conversation.getAdvertisement().getUser().getId(), conversation.getParticipant().getId()))
+                .conversationId(conversation.getId())
                 .build();
     }
 

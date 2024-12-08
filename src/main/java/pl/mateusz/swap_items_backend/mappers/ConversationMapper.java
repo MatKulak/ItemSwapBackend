@@ -36,6 +36,7 @@ public class ConversationMapper {
                         conversation.getParticipant().getUsername())
                 .participantId(conversation.getParticipant().getId() == userId ? conversation.getAdvertisement().getUser().getId() :
                         conversation.getParticipant().getId())
+                .conversationId(conversation.getId())
                 .build();
     }
 }

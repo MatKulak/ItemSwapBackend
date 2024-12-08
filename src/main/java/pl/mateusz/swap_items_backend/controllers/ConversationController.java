@@ -8,6 +8,7 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,14 +26,20 @@ import java.util.UUID;
 public class ConversationController {
 
     private static final String API_CONVERSATIONS = "/api/conversations";
-    private static final String API_CONVERSATION = "/api/conversation";
+    private static final String API_CONVERSATION = "/api/conversations/{id}";
+    private static final String API_CONVERSATION_ADV = "/api/conversation";
     private static final String API_CONVERSATIONS_PAGE = API_CONVERSATIONS + "/page";
 
     private final ConversationService conversationService;
 
+    @GetMapping(API_CONVERSATION_ADV)
+    public ConversationResponse getOneByAdvertisement(@RequestParam final UUID advertisementId) {
+        return ConversationMapper.toConversationResponse(conversationService.getConversationByAdvertisementId(advertisementId));
+    }
+
     @GetMapping(API_CONVERSATION)
-    public ConversationResponse getOneByAdvertisementIdAndParticipantId(@RequestParam final UUID advertisementId, @RequestParam(required = false) final UUID participantId) {
-        return ConversationMapper.toConversationResponse(conversationService.getConversationByAdvertisementId(advertisementId, participantId));
+    public ConversationResponse getOneById(@PathVariable("id") final UUID id) {
+        return ConversationMapper.toConversationResponse(conversationService.getConversationById(id));
     }
 
     @GetMapping(API_CONVERSATIONS_PAGE)

@@ -10,6 +10,7 @@ import pl.mateusz.swap_items_backend.criteria.ConversationCriteria;
 import pl.mateusz.swap_items_backend.dto.conversation.SimpleConversationResponse;
 import pl.mateusz.swap_items_backend.entities.Advertisement;
 import pl.mateusz.swap_items_backend.entities.Conversation;
+import pl.mateusz.swap_items_backend.entities.User;
 import pl.mateusz.swap_items_backend.mappers.ConversationMapper;
 import pl.mateusz.swap_items_backend.repositories.ConversationRepository;
 import pl.mateusz.swap_items_backend.utils.Utils;
@@ -25,16 +26,15 @@ public class ConversationService {
     private final ConversationRepository conversationRepository;
     private final AdvertisementService advertisementService;
 
-    public Conversation getConversationByAdvertisementId(final UUID advertisementId, final UUID participantId) {
-        final UUID loggedUserId = Utils.getLoggedUserId();
+    public Conversation getConversationByAdvertisementId(final UUID advertisementId) {
         final Advertisement advertisement = advertisementService.getAdvertisementById(advertisementId);
-        final boolean isOwnerOfAdvertisement = advertisement.getUser().getId().equals(loggedUserId);
+        final User loggedUser = Utils.getLoggedUser();
 
-        if (isOwnerOfAdvertisement && participantId != null) {
-            return conversationRepository.findAllConversationsByAdvertisementIdAndParticipantId(advertisementId, participantId).get(0);
-        } else {
-            return getConversationByParticipantIdAndAdvertisementId(loggedUserId, advertisementId);
+        if (advertisement.getUser().getId().equals(loggedUser.getId())) {
+            throw new RuntimeException();
         }
+
+        return conversationRepository.findConversationByAdvertisementIdAndParticipantId(advertisement.getId(), loggedUser.getId()).orElseThrow();
     }
 
     public Conversation save(final Conversation conversation) {

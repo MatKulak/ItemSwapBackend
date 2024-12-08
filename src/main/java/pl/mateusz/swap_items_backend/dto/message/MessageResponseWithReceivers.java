@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class MessageResponseWithReceivers {
 
+    private UUID conversationId;
     private MessageResponse messageResponse;
     private Set<UUID> receiverIds;
 }

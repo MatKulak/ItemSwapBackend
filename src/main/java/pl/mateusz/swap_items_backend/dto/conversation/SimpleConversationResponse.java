@@ -17,5 +17,6 @@ public class SimpleConversationResponse {
     private UUID advertisementId;
     private String username;
     private UUID participantId;
+    private UUID conversationId;
 }
 
